@@ -4,55 +4,35 @@ import com.vti.rw41.entity.Product;
 import org.hibernate.Session;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class Main {
 
     public static void main(String[] args) {
-
-        testSelectAndUpdate();
+//        testInsert();
+//        testSelectAndUpdate();
 //        testSelectAndDelete();
 
+        List<Product> result = ProductRepository.findByName("SP1");
+
+        for (Product product : result) {
+            System.out.println(product);
+        }
     }
 
     static void testSelectAndDelete() {
-
-        Session session = HibernateUtils.getSessionFactory()
-                .openSession();
-
-        session.beginTransaction();
-
-        Product product = session.find(Product.class, 2);
-
+        Product product = ProductRepository.findById(3);
         if (product != null) {
-            session.delete(product);
+            ProductRepository.delete(product);
         }
-
-        session.getTransaction().commit();
-
     }
 
     static void testSelectAndUpdate() {
-
-        Session session = HibernateUtils.getSessionFactory()
-                .openSession();
-
-        session.beginTransaction();
-
-        Product product = session.find(Product.class, 2);
-
+        Product product = ProductRepository.findById(3);
         if (product != null) {
-
-            product.setPrice(99.9);
-            product.setUpdatedDate(LocalDateTime.now());
-            product.setName("San pham 1");
-
-            session.saveOrUpdate(product);
-
+            product.setName("AAAAAAAAAAAAAAAAA");
+            ProductRepository.saveOrUpdate(product);
         }
-
-        session.getTransaction().commit();
-
-        System.out.println(product);
     }
 
     // update product set name = 'updated name' where id = 1
