@@ -1,4 +1,4 @@
-package com.vti.rw41;
+package com.vti.rw41.utils;
 
 import com.vti.rw41.entity.Product;
 import org.hibernate.SessionFactory;

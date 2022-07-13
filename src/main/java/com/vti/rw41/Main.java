@@ -1,6 +1,8 @@
 package com.vti.rw41;
 
 import com.vti.rw41.entity.Product;
+import com.vti.rw41.repository.ProductRepository;
+import com.vti.rw41.utils.HibernateUtils;
 import org.hibernate.Session;
 
 import java.time.LocalDateTime;

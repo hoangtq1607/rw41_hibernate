@@ -1,10 +1,10 @@
-package com.vti.rw41;
+package com.vti.rw41.repository;
 
 import com.vti.rw41.entity.Product;
+import com.vti.rw41.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
 
-import javax.persistence.NoResultException;
 import java.util.List;
 
 public class ProductRepository {
