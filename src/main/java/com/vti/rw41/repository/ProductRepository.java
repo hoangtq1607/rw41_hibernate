@@ -13,7 +13,7 @@ public class ProductRepository {
 
         Session session = HibernateUtils.getSessionFactory()
                 .openSession();
-        Query<ProductEntity> query = session.createQuery("FROM ProductEntity WHERE name = :productName", ProductEntity.class);
+        Query<ProductEntity> query = session.createQuery("FROM ProductEntity p join FETCH p.category WHERE p.productName = :productName", ProductEntity.class);
         query.setParameter("productName", name);
 
         return query.getResultList();
@@ -52,4 +52,10 @@ public class ProductRepository {
         return productEntity;
     }
 
+    public static List<ProductEntity> findAllProduct() {
+        Session session = HibernateUtils.getSessionFactory()
+                .openSession();
+        return session.createQuery("from ProductEntity", ProductEntity.class)
+                .getResultList();
+    }
 }

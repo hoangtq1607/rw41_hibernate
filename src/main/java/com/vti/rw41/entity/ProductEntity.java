@@ -38,4 +38,7 @@ public class ProductEntity {
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
 
+    @ManyToOne
+    private CategoryEntity category;
+
 }

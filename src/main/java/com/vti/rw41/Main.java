@@ -1,29 +1,52 @@
 package com.vti.rw41;
 
-import com.vti.rw41.entity.BillDetail;
-import com.vti.rw41.entity.ProductEntity;
-import com.vti.rw41.entity.Student;
-import com.vti.rw41.entity.TestTable;
+import com.vti.rw41.entity.*;
 import com.vti.rw41.enumurations.ProductStatus;
+import com.vti.rw41.repository.CategoryRepository;
 import com.vti.rw41.repository.ProductRepository;
 import com.vti.rw41.utils.HibernateUtils;
 import org.hibernate.Session;
 
 import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Session session = HibernateUtils.getSessionFactory().openSession();
-        session.beginTransaction();
-        BillDetail billDetail = new BillDetail();
-        billDetail.setBillId(1);
-        billDetail.setQuantity(10);
-        billDetail.setProductPrice(99.99);
-        billDetail.setProductId(1);
-        session.saveOrUpdate(billDetail);
-        session.getTransaction().commit();
+        Optional<CategoryEntity> category = CategoryRepository.findByName("Điện Tử");
+
+        if (category.isPresent()) {
+
+            CategoryEntity categoryEntity = category.get();
+
+            System.out.println("category name = " + categoryEntity.getName());
+            System.out.println("products: ");
+            for (ProductEntity product : categoryEntity.getProducts()) {
+                System.out.println(product.getId() + " -- " + product.getProductName());
+            }
+
+        }
+
+//        List<ProductEntity> products = ProductRepository.findAllProduct();
+//
+//        for (ProductEntity product : products) {
+//
+//            if (category.isPresent()) {
+//                product.setCategory(category.get());
+//            }
+//
+//            ProductRepository.saveOrUpdate(product);
+//            System.out.println(product);
+//        }
+
+//        List<ProductEntity> products = ProductRepository.findByName("San pham 4");
+//
+//        for (ProductEntity product : products) {
+//            System.out.println(product.getCategory().getName());
+//        }
+
     }
 
     static void testSelectAndDelete() {
