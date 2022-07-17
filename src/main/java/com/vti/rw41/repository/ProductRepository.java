@@ -1,6 +1,6 @@
 package com.vti.rw41.repository;
 
-import com.vti.rw41.entity.Product;
+import com.vti.rw41.entity.ProductEntity;
 import com.vti.rw41.utils.HibernateUtils;
 import org.hibernate.Session;
 import org.hibernate.query.Query;
@@ -9,45 +9,47 @@ import java.util.List;
 
 public class ProductRepository {
 
-    public static List<Product> findByName(String name) {
+    public static List<ProductEntity> findByName(String name) {
 
         Session session = HibernateUtils.getSessionFactory()
                 .openSession();
-        Query<Product> query = session.createQuery("FROM Product WHERE name = :productName", Product.class);
+        Query<ProductEntity> query = session.createQuery("FROM ProductEntity WHERE name = :productName", ProductEntity.class);
         query.setParameter("productName", name);
 
         return query.getResultList();
 
     }
 
-    public static Product findById(Integer id) {
+    public static ProductEntity findProductById(Integer id) {
+
         Session session = HibernateUtils.getSessionFactory()
                 .openSession();
 
-        return session.find(Product.class, id);
+        return session.find(ProductEntity.class, id);
 
     }
 
-    public static Product saveOrUpdate(Product product) {
+    public static ProductEntity saveOrUpdate(ProductEntity productEntity) {
         Session session = HibernateUtils.getSessionFactory()
                 .openSession();
 
         session.beginTransaction();
-        session.saveOrUpdate(product);
+
+        session.saveOrUpdate(productEntity);
 
         session.getTransaction().commit();
-        return product;
+        return productEntity;
     }
 
-    public static Product delete(Product product) {
+    public static ProductEntity delete(ProductEntity productEntity) {
         Session session = HibernateUtils.getSessionFactory()
                 .openSession();
 
         session.beginTransaction();
-        session.delete(product);
+        session.delete(productEntity);
 
         session.getTransaction().commit();
-        return product;
+        return productEntity;
     }
 
 }
