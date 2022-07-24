@@ -6,10 +6,13 @@ import org.hibernate.annotations.GenericGenerator;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.Table;
+import java.time.LocalDateTime;
 
 @Entity
 @Data
-public class Student {
+@Table(name = "Student")
+public class StudentEntity extends BaseEntity {
 
     @Id
     @GenericGenerator( // khai bao
@@ -19,4 +22,5 @@ public class Student {
     private String id; // SYYYYxxxxx -> S202200001, S202200002, S202200011
 
     private String name;
+
 }

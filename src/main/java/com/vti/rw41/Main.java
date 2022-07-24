@@ -1,52 +1,95 @@
 package com.vti.rw41;
 
-import com.vti.rw41.entity.*;
+import com.vti.rw41.entity.ProductEntity;
+import com.vti.rw41.entity.dto.DepartmentDto;
+import com.vti.rw41.entity.dto.ProductDto;
+import com.vti.rw41.entity.department.Account;
 import com.vti.rw41.enumurations.ProductStatus;
-import com.vti.rw41.repository.CategoryRepository;
+import com.vti.rw41.repository.DepartmentRepository;
 import com.vti.rw41.repository.ProductRepository;
 import com.vti.rw41.utils.HibernateUtils;
 import org.hibernate.Session;
+import org.hibernate.query.NativeQuery;
+import org.hibernate.query.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.Optional;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Optional<CategoryEntity> category = CategoryRepository.findByName("Điện Tử");
+        Account account = Account.builder()
+                .firstName("Tran")
+                .email("hoang@vti.com.vn")
+                .build();
 
-        if (category.isPresent()) {
+        account.setEmail("");
+        account.setId(1);
+        account.setFirstName("hoang");
 
-            CategoryEntity categoryEntity = category.get();
+//        List<DepartmentDto> allDepartments = DepartmentRepository.getAllDepartments("and", 1, 50);
+//
+//        for (DepartmentDto departmentDto : allDepartments) {
+//            System.out.println(departmentDto);
+//        }
 
-            System.out.println("category name = " + categoryEntity.getName());
-            System.out.println("products: ");
-            for (ProductEntity product : categoryEntity.getProducts()) {
-                System.out.println(product.getId() + " -- " + product.getProductName());
-            }
+        List<DepartmentDto> allDepartments = DepartmentRepository.getAllDepts("Sons", 1, 50);
 
+        for (DepartmentDto departmentDto : allDepartments) {
+            System.out.println(departmentDto);
         }
 
-//        List<ProductEntity> products = ProductRepository.findAllProduct();
-//
-//        for (ProductEntity product : products) {
-//
-//            if (category.isPresent()) {
-//                product.setCategory(category.get());
-//            }
-//
-//            ProductRepository.saveOrUpdate(product);
-//            System.out.println(product);
-//        }
+    }
 
-//        List<ProductEntity> products = ProductRepository.findByName("San pham 4");
-//
-//        for (ProductEntity product : products) {
-//            System.out.println(product.getCategory().getName());
-//        }
+    private static void demoSQL() {
+        Session session = HibernateUtils.getSessionFactory()
+                .openSession();
+        NativeQuery<ProductEntity> nativeQuery = session.createNativeQuery("select * from product ", ProductEntity.class);
 
+        List<ProductEntity> resultList = nativeQuery.getResultList();
+        for (ProductEntity productEntity : resultList) {
+            System.out.println(productEntity.getProductName() + " - " + productEntity.getPrice());
+        }
+    }
+
+    private static void demoSelectDto() {
+        Session session = HibernateUtils.getSessionFactory()
+                .openSession();
+
+        //DTO -> data transfer object
+
+        // select * from product where name like '%test%'
+        Query<ProductDto> query = session.createQuery("" +
+                "Select new com.vti.rw41.ProductDto(p.productName, p.price, c.name)" +
+                " from ProductEntity p " +
+                " left join p.category c ", ProductDto.class);
+
+        List<ProductDto> resultList = query.getResultList();
+
+        for (ProductDto dto : resultList) {
+
+            System.out.println(dto);
+        }
+    }
+
+    private static void demoUpdateHql() {
+        Session session = HibernateUtils.getSessionFactory()
+                .openSession();
+
+        session.beginTransaction();
+        // select * from product where name like '%test%'
+        Query query = session.createQuery("" +
+                "update ProductEntity p " +
+                " set p.productName = :productName " +
+                " WHERE p.id = :productId");
+
+        query.setParameter("productId", 5);
+        query.setParameter("productName", "updated product");
+
+        query.executeUpdate();
+
+        session.getTransaction().commit();
     }
 
     static void testSelectAndDelete() {

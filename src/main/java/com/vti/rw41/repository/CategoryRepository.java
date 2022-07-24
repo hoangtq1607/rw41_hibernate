@@ -11,8 +11,7 @@ public class CategoryRepository {
 
     public static Optional<CategoryEntity> findByName(String name) {
 
-        Session session = HibernateUtils.getSessionFactory()
-                .openSession();
+        Session session = HibernateUtils.getSession();
         Query<CategoryEntity> query = session.createQuery(
                 "FROM CategoryEntity where name = :name", CategoryEntity.class)
                 .setParameter("name", name);
@@ -20,4 +19,12 @@ public class CategoryRepository {
         return query.getResultStream().findFirst();
     }
 
+    public static void save(CategoryEntity categoryEntity) {
+
+        Session session = HibernateUtils.getSession();
+        session.beginTransaction();
+        session.saveOrUpdate(categoryEntity);
+        session.getTransaction().commit();
+
+    }
 }

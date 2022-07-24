@@ -14,8 +14,8 @@ import java.time.LocalDateTime;
 @Setter
 @ToString
 @Entity
-@Table(name = "product")
-public class ProductEntity {
+@Table(name = "product") // -> SQL: select * from product
+public class ProductEntity  extends BaseEntity { // -> from ProductEntity
 
     @Id
     @GeneratedValue(generator = "productIdSeq") // -> su sung seq
@@ -30,11 +30,6 @@ public class ProductEntity {
     private String productName;
 
     private Double price;
-
-    private LocalDateTime createdDate; // -> created_date
-
-    private LocalDateTime updatedDate;
-
     @Enumerated(EnumType.STRING)
     private ProductStatus status;
 

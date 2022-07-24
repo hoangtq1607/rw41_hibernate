@@ -1,9 +1,6 @@
 package com.vti.rw41.entity.generator;
 
-import com.vti.rw41.entity.Student;
-import com.vti.rw41.utils.HibernateUtils;
 import org.hibernate.HibernateException;
-import org.hibernate.Session;
 import org.hibernate.engine.spi.SharedSessionContractImplementor;
 import org.hibernate.id.IdentifierGenerator;
 
