@@ -14,31 +14,27 @@ import org.hibernate.query.Query;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.Optional;
 
 public class Main {
 
     public static void main(String[] args) {
 
-        Account account = Account.builder()
-                .firstName("Tran")
-                .email("hoang@vti.com.vn")
-                .build();
-
-        account.setEmail("");
-        account.setId(1);
-        account.setFirstName("hoang");
-
-//        List<DepartmentDto> allDepartments = DepartmentRepository.getAllDepartments("and", 1, 50);
-//
-//        for (DepartmentDto departmentDto : allDepartments) {
-//            System.out.println(departmentDto);
-//        }
-
-        List<DepartmentDto> allDepartments = DepartmentRepository.getAllDepts("Sons", 1, 50);
-
-        for (DepartmentDto departmentDto : allDepartments) {
-            System.out.println(departmentDto);
-        }
+//        String search = "e";
+////        List<DepartmentDto> allDepartments =
+////                DepartmentRepository.getAllDepartments(search, 1, 5);
+////        System.out.println("total = " + DepartmentRepository.getTotal(search));
+////
+////        for (DepartmentDto departmentDto : allDepartments) {
+////            System.out.println(departmentDto);
+////        }
+////        // [1] [2] ... [6] [7]
+////        // [1] [2] ... [14] [15]
+////        // [1]
+        Optional<DepartmentDto> departmentById = DepartmentRepository.getDepartmentById(1000);
+        System.out.println(departmentById);
+        Optional<DepartmentDto> departmentByName = DepartmentRepository.getDepartmentByName("Upton LLC");
+        System.out.println(departmentByName);
 
     }
 

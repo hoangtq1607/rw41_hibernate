@@ -11,6 +11,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 public class DepartmentRepository {
@@ -43,6 +44,51 @@ public class DepartmentRepository {
                 .setFirstResult((page - 1) * pageSize); //bo qua N phan tu -- N = (page - 1) * pageSize
 
         return query.getResultList();
+    }
+
+    public static Optional<DepartmentDto> getDepartmentById(Integer id) {
+
+        Session session = HibernateUtils.getSession();
+
+        Query<DepartmentDto> query = session.createQuery("" +
+                "select " +
+                "new com.vti.rw41.entity.dto.DepartmentDto(d.id, d.departmentName, a.name) " +
+                "from DetailDepartment dd " +
+                " right join dd.department d left join dd.address a " +
+                " WHERE d.id = :departmentId ", DepartmentDto.class)
+                .setParameter("departmentId", id);
+
+        return query.getResultStream()
+                .findFirst();
+    }
+
+    public static Optional<DepartmentDto> getDepartmentByName(String name) {
+
+        Session session = HibernateUtils.getSession();
+
+        Query<DepartmentDto> query = session.createQuery("" +
+                "select " +
+                "new com.vti.rw41.entity.dto.DepartmentDto(d.id, d.departmentName, a.name) " +
+                "from DetailDepartment dd " +
+                " right join dd.department d left join dd.address a " +
+                " WHERE d.departmentName = :departmentName ", DepartmentDto.class)
+                .setParameter("departmentName", name);
+
+        return query.getResultStream()
+                .findFirst();
+    }
+
+    public static int getTotal(String search) {
+
+        Session session = HibernateUtils.getSession();
+
+        Query query = session.createQuery("" +
+                "select count(d) " +
+                "from Department d " +
+                " WHERE d.departmentName like :departmentName")
+                .setParameter("departmentName", "%" + search + "%");
+
+        return ((Number) query.getSingleResult()).intValue();
     }
 
     public static List<DepartmentDto> getAllDepts(String search, int page, int pageSize) {
